@@ -1,0 +1,219 @@
+" Basic settings
+set number
+set cursorline
+set cursorcolumn
+set hlsearch
+set autoindent
+set smartindent
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set expandtab
+set nobackup
+set scrolloff=10
+set nowrap
+set incsearch
+set ignorecase
+set smartcase
+set showcmd
+set showmode
+set showmatch
+set nocompatible
+set history=1000
+set wildmenu
+set wildmode=list:longest
+set wildignore=*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx
+filetype on
+filetype plugin on
+filetype indent on
+syntax on
+
+" Encoding settings
+set encoding=utf-8
+set fileencoding=utf-8
+
+" Whitespace display
+set list
+set listchars=tab:→\ ,trail:·
+
+" Plugin management
+call plug#begin('~/.vim/plugged')
+
+" LSP client
+Plug 'prabirshrestha/vim-lsp'
+Plug 'mattn/vim-lsp-settings'
+
+" Auto completion
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'prabirshrestha/asyncomplete-buffer.vim'
+
+" Syntax highlighting and checking
+Plug 'dense-analysis/ale'
+
+" File browser
+Plug 'preservim/nerdtree'
+
+" Fuzzy finder
+Plug 'ctrlpvim/ctrlp.vim'
+
+" Status bar
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
+" Code formatting
+Plug 'vim-autoformat/vim-autoformat'
+
+" Git support
+Plug 'tpope/vim-fugitive'
+
+" Bracket matching
+Plug 'jiangmiao/auto-pairs'
+
+" Comment plugin
+Plug 'preservim/nerdcommenter'
+
+call plug#end()
+
+" LSP configuration - focused suggestions
+let g:lsp_diagnostics_enabled = 1
+let g:lsp_signs_enabled = 1
+let g:lsp_diagnostics_echo_cursor = 0
+let g:lsp_highlight_references_enabled = 1
+let g:lsp_diagnostics_float_cursor = 0
+let g:lsp_signature_help_enabled = 1
+let g:lsp_completion_auto_import = 0              " Disable auto import to reduce noise
+let g:lsp_document_symbol_enabled = 1
+let g:lsp_completion_resolve_timeout = 200        " Faster completion
+let g:lsp_completion_filter_text = 1              " Filter completion text
+
+" LSP keybindings
+nmap <silent> gd <plug>(lsp-definition)
+nmap <silent> gr <plug>(lsp-references)
+nmap <silent> gi <plug>(lsp-implementation)
+nmap <silent> gt <plug>(lsp-type-definition)
+nmap <silent> <leader>rn <plug>(lsp-rename)
+nmap <silent> [g <plug>(lsp-previous-diagnostic)
+nmap <silent> ]g <plug>(lsp-next-diagnostic)
+nmap <silent> K <plug>(lsp-hover)
+
+" Auto completion configuration - focused completion
+let g:asyncomplete_auto_popup = 1
+let g:asyncomplete_popup_delay = 200
+let g:asyncomplete_min_chars = 2
+let g:asyncomplete_max_items = 10                 " Limit to 10 suggestions
+let g:asyncomplete_smart_completion = 1           " Smart filtering
+
+" Focus completion on relevant content only
+" Buffer completion will be automatically registered by the plugin
+
+" Enhanced completion behavior
+set completeopt=menu,menuone,noselect,noinsert
+set pumheight=10                                  " Limit popup menu height
+
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
+
+" ALE syntax checking
+let g:ale_linters = {
+\   'cpp': ['clangd', 'cppcheck'],
+\   'c': ['clangd', 'cppcheck'],
+\   'python': ['pylsp', 'flake8'],
+\   'rust': ['analyzer'],
+\   'java': ['javac']
+\}
+
+let g:ale_fixers = {
+\   'cpp': ['clang-format'],
+\   'c': ['clang-format'],
+\   'python': ['autopep8', 'isort'],
+\   'rust': ['rustfmt'],
+\   'java': ['google_java_format']
+\}
+
+let g:ale_fix_on_save = 1
+let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_delay = 300
+let g:ale_echo_cursor = 0
+let g:ale_virtualtext_cursor = 0
+let g:ale_sign_error = 'X'
+let g:ale_sign_warning = '!'
+
+" NERDTree configuration
+map <C-n> :NERDTreeToggle<CR>
+let g:NERDTreeShowHidden = 1
+
+" CtrlP configuration
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_working_path_mode = 'ra'
+
+" Airline configuration
+let g:airline#extensions#ale#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
+
+" Code formatting
+noremap <F3> :Autoformat<CR>
+
+" Custom keybindings
+nnoremap <C-s> :w<CR>
+inoremap <C-s> <Esc>:w<CR>a
+nnoremap <C-q> :q<CR>
+
+" Window navigation
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" Buffer navigation
+nnoremap <C-n> :bnext<CR>
+nnoremap <C-p> :bprevious<CR>
+
+" Search highlight control
+nnoremap <leader>h :nohlsearch<CR>
+
+" Leader key setting
+let mapleader = ","
+
+" Manual control functions
+nnoremap <leader>d :ALEDetail<CR>
+nnoremap <leader>t :ALEToggle<CR>
+nnoremap <leader>e :echo lsp#get_buffer_diagnostics()<CR>
+nnoremap <F4> :set list!<CR>
+
+" Manual completion
+inoremap <C-Space> <C-x><C-o>
+inoremap <leader><Space> <C-x><C-o>
+nnoremap <leader>c :let g:asyncomplete_auto_popup = !g:asyncomplete_auto_popup<CR>
+
+" Other settings
+set foldmethod=syntax
+set foldlevelstart=99
+set mouse=a
+set autoread
+
+" File type configuration
+autocmd FileType cpp,c setlocal commentstring=//\ %s
+autocmd FileType python setlocal commentstring=#\ %s
+autocmd FileType rust setlocal commentstring=//\ %s
+autocmd FileType java setlocal commentstring=//\ %s
+
+" C/C++ specific settings for focused completion
+autocmd FileType c,cpp setlocal complete=.,w,b,u,t,i
+autocmd FileType c,cpp setlocal omnifunc=lsp#complete
+
+" Configure clangd for relevant suggestions only
+let g:lsp_settings = {
+\   'clangd': {
+\     'cmd': ['clangd', '--background-index', '--suggest-missing-includes',
+\             '--clang-tidy', '--completion-style=bundled'],
+\     'initialization_options': {
+\       'completion': {
+\         'detailedLabel': v:false,
+\         'snippetSupport': v:false
+\       }
+\     }
+\   }
+\}

@@ -1,0 +1,50 @@
+# Change the title
+echo -n -e "\033]0;Mac Terminal\007"
+# change prompt
+setopt PROMPT_SUBST
+PROMPT='%F{white}%B[%b %f%K{white}%F{black}%D{%H:%M:%S}%f%k %F{white}mb-pro-m2max%f %U%F{048}%~%f%u%F{white} %B] %b$%f '
+# use yellow for directories
+export CLICOLOR=1
+export LSCOLORS=dxfxcxdxbxegedabagacad
+# quickly edit and source .zshrc
+alias vz="vi ~/.zshrc"
+alias sz=" source ~/.zshrc; echo '~/.zshrc sourced'"
+# Other useful alias
+alias grep='grep --color'
+alias c="clear"
+alias l="ls"
+alias ll="ls -lah"
+alias lh="ls -a | egrep '^\.'"
+alias copy="cp"
+alias f='find . | grep'
+# IP alias and functions
+alias ip="ifconfig -a | egrep -A 7 '^en0' | grep inet | grep -oE '((1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.){3}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])' | head -n 1"
+alias myip="curl -s http://checkip.dyndns.org/ | sed 's/[a-zA-Z<>/ :]//g'"
+# Pretty print the PATH
+alias path='echo; tr ":" "\n" <<< "$PATH"; echo;'
+# Let the cow say something
+cow () { cowsay "$1"; echo; }
+# Fortune with spaces
+quote () { echo; fortune; echo; }
+# Git functions
+# Pull all git repositories in current directory subdirectories
+pullall () { 
+    echo "Checking for git repositories in current directory..."
+    find . -maxdepth 1 -type d -exec sh -c 'cd "$1" && if [ -d .git ]; then echo "Pulling $1..." && git pull; fi' _ {} \;
+    echo "Done!"
+}
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/opt/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/opt/miniconda3/etc/profile.d/conda.sh"]; then
+        . "/opt/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/opt/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<
+export PATH="/opt/homebrew/Cellar/llvm/20.1.2/bin:$PATH"

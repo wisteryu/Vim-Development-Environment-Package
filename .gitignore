@@ -1,0 +1,28 @@
+# Vim temporary files
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Backup files
+*.backup.*
+*~
+
+# Log files
+*.log
+
+# Compressed files (we have the source)
+*.tar.gz
+*.zip
+
+# Local test files
+test.*
+temp.*
